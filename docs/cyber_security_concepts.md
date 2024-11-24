@@ -76,7 +76,7 @@ Segít a rendszergazdáknak azonosítani a sérülékeny pontokat és megtervezn
 
 ---
 
-Source
+Source:
 ```
 @misc{openai2024chatgpt,
   author       = {OpenAI},
