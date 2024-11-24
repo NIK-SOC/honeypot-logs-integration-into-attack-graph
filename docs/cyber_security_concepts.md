@@ -1,4 +1,4 @@
-# Fontos fogalmak a tanulmányból
+# Fontos fogalmak a tanulmányokból
 
 ## 1. Cyber Threat Intelligence (CTI)
 **Mit jelent?**  
