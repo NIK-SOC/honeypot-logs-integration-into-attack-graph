@@ -1,0 +1,99 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\begin{document}
+
+\title{Integration of Honeypot Logs into Neo4j Graph Database Using the STIX Data Model}
+
+\author{\IEEEauthorblockN{1\textsuperscript{st} Sándor Róbert Bakos}
+\IEEEauthorblockA{\textit{John von Neumann Faculty of Informatics} \\
+\textit{Obuda University}\\
+Budapest, Hungary \\
+sandor.r.bakos@stud.uni-obuda.hu}
+\and
+\IEEEauthorblockN{2\textsuperscript{nd} Anna Bánáti}
+\IEEEauthorblockA{\textit{John von Neumann Faculty of Informatics} \\
+\textit{Obuda University}\\
+Budapest, Hungary \\
+banati.anna@nik.uni-obuda.hu}
+}
+
+\maketitle
+
+\begin{abstract}
+This paper aims to demonstrate the integration of honeypot logs into a Neo4j graph database using the STIX data model. The study focuses on creating and analyzing attack graphs for identifying vulnerabilities and attack patterns while exploring their applicability in optimizing Security Operation Centers (SOC).
+\end{abstract}
+
+\begin{IEEEkeywords}
+honeypot, STIX, attack graph, Neo4j, SOC
+\end{IEEEkeywords}
+
+\section{Introduction\cite{openai2024chatgpt}}
+
+In the rapidly evolving landscape of cybersecurity, the ability to detect, analyze, and mitigate threats is paramount for maintaining secure systems. Cyber attackers continuously develop sophisticated methods to exploit vulnerabilities, necessitating proactive defense mechanisms1. Honeypots, which are decoy systems designed to attract attackers, generate vast amounts of data that provide valuable insights into malicious activities23. By simulating vulnerable systems, honeypots capture detailed information about attack vectors, tools, and methodologies employed by adversaries. However, analyzing these logs in their raw form presents significant challenges due to their volume, complexity, and lack of standardization4.
+
+Traditional data analysis techniques may not efficiently handle the complex relationships inherent in cybersecurity data. Graph databases, such as Neo4j, offer powerful means to model and analyze these relationships effectively5. Furthermore, the Structured Threat Information Expression (STIX) data model provides a standardized framework for representing cyber threat intelligence, facilitating information sharing and interoperability6.
+
+This paper aims to demonstrate the integration of honeypot logs into a Neo4j graph database using the STIX data model. By leveraging Neo4j's graph capabilities and STIX's structured approach to threat intelligence, this study seeks to create and analyze attack graphs to identify vulnerabilities, track attack paths, and derive actionable insights. This integration enables the visualization of complex attack patterns and supports more effective threat analysis and response.
+
+The novelty of this research lies in its focus on applying a graph-based approach to honeypot log analysis within the STIX framework. While previous studies have explored honeypot data analysis and the use of graph databases separately, the combined application in this context is less explored7. This approach not only enhances the visualization of attack patterns but also facilitates better decision-making in Security Operations Centers (SOCs) by providing a comprehensive view of threats8. Additionally, it offers a scalable and standardized method for transforming and integrating threat intelligence data, promoting collaboration across organizations9.
+
+The remainder of this paper is structured as follows: Section 2 provides background on honeypots, the STIX data model, and Neo4j. Section 3 describes the methodology for integrating honeypot logs into a graph database. Section 4 presents a case study to demonstrate the application of the proposed approach. Section 5 discusses the results and implications of the study, while Section 6 concludes with key findings and directions for future work.
+
+
+
+\section{Background}
+\subsection{Honeypot Technology}
+Honeypots are designed to gather intelligence on attack methods and deceive attackers. They have been widely used in SOC environments for monitoring and profiling adversarial behavior \cite{honeypotsurvey}.
+
+\subsection{STIX Data Model}
+The Structured Threat Information Expression (STIX) data model provides a standardized approach for representing and sharing cyber threat intelligence. STIX objects, such as domain objects (e.g., attack patterns, vulnerabilities) and relationships (e.g., "targets" or "uses"), form the building blocks of structured cyber threat data \cite{simonnagy2022attackgraphs}.
+
+
+\subsection{Neo4j Graph Database}
+Neo4j's Labeled Property Graph (LPG) model is highly suited for representing STIX data due to its ability to handle nodes and relationships with properties efficiently. The use of Cypher, Neo4j’s query language, enables fast traversal and pattern matching, making it ideal for analyzing complex attack graphs \cite{simonnagy2022attackgraphs}.
+
+
+\subsection{Attack Graphs}
+Attack graphs represent vulnerabilities and potential attack paths in a system. They are commonly used in SOCs to enhance risk assessment and prioritize security measures \cite{attackgraphsurvey}.
+
+\section{Methodology}
+\subsection{Data Collection}
+Synthetic or publicly available honeypot logs are utilized to streamline experimentation and reproducibility.
+
+\subsection{Transforming Logs into STIX Format}
+Logs are converted into STIX objects (e.g., attack patterns, indicators) and relationships to represent attack scenarios.
+
+\subsection{Loading Data into Neo4j}
+The STIX data is imported into Neo4j, creating a graph representation of the attack scenarios.
+
+\subsection{Graph Visualization and Analysis}
+Attack graphs are visualized using Neo4j's query and visualization tools, enabling insights into attack paths and vulnerabilities.
+
+\section{Case Study}
+A honeypot log dataset is used to demonstrate the process. The resulting attack graph highlights critical vulnerabilities and paths, as illustrated in related works \cite{banati2022attackgraphs}.
+
+\section{Results and Discussion}
+\subsection{Advantages of Graph-Based Analysis}
+Graph-based methods enable efficient visualization and prioritization of security risks, aligning with studies like \cite{banati2022attackgraphs}.
+
+\subsection{Challenges}
+Scalability and dynamic updates of attack graphs remain significant challenges, as noted in \cite{simonnagy2022attackgraphs}. Addressing these issues requires optimized graph traversal algorithms and real-time data integration.
+
+
+\subsection{Opportunities}
+Future work could focus on real-time graph updates and dynamic risk assessment methods, as proposed by \cite{neo4jguide}.
+
+\section{Conclusion and Future Work}
+This study demonstrates the integration of honeypot logs into Neo4j using the STIX data model, emphasizing its utility for SOC optimization. Future work will focus on real-time graph models and scalability improvements.
+
+\section*{Acknowledgment}
+The authors thank [Name/Institution] for supporting this research.
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
