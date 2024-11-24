@@ -69,6 +69,15 @@ Source:
   url       = {https://research.tue.nl/en/studentTheses/a-unified-data-model-for-cyber-threat-intelligence-in-operational},
   note      = {Accessed: 2024-11-23}
 }
+
+@misc{openai2024chatgpt,
+  author       = {OpenAI},
+  title        = {ChatGPT language model},
+  year         = {2024},
+  howpublished = {Online},
+  url          = {https://chatgpt.com/share/67438b7e-3044-8013-ac54-a2ae7ba48299},
+  note         = {Accessed: Nov. 24, 2024}
+}
 ```
 
-Created by [ChatGPT](https://chatgpt.com/share/67438b7e-3044-8013-ac54-a2ae7ba48299) and Sandor R. Bakos
+Created by Sandor R. Bakos
