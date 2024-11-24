@@ -70,3 +70,5 @@ Source:
   note      = {Accessed: 2024-11-23}
 }
 ```
+
+Created by [ChatGPT](https://chatgpt.com/share/67438b7e-3044-8013-ac54-a2ae7ba48299) and Sandor R. Bakos
