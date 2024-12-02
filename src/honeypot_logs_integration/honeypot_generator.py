@@ -7,9 +7,9 @@ ATTACK_SCENARIOS = {
     "SSH brute-force": {
         "services": ["SSH"],
         "payloads": [
-            {"type": "credentials", "username": "admin", "password": "password123"},
-            {"type": "credentials", "username": "root", "password": "123456"},
-            {"type": "credentials", "username": "user", "password": "letmein"}
+            {"type": "credentials", "content": '"username": "admin", "password": "password123"'},
+            {"type": "credentials", "content": '"username": "root", "password": "123456"'},
+            {"type": "credentials", "content": '"username": "user", "password": "letmein"'}
         ]
     },
     "SQL injection": {
@@ -73,7 +73,7 @@ if __name__ == "__main__":
     logs = generate_logs(num_logs)
 
     # Save logs to a JSON file
-    output_file = "sample_honeypot_logs/synthetic_honeypot_logs.json"
+    output_file = "synthetic_honeypot_logs.json"
     with open(output_file, "w") as f:
         json.dump(logs, f, indent=4)
 
