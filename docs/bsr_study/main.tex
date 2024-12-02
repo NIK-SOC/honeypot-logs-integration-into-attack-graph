@@ -64,8 +64,58 @@ Neo4j's Labeled Property Graph (LPG) model is highly suited for representing STI
 Attack graphs represent vulnerabilities and potential attack paths in a system. They are commonly used in SOCs to enhance risk assessment and prioritize security measures \cite{attackgraphsurvey}.
 
 \section{Methodology}
-\subsection{Data Collection}
-Synthetic or publicly available honeypot logs are utilized to streamline experimentation and reproducibility.
+\subsection{Synthetic Honeypot Log Generation}
+
+To demonstrate the integration of honeypot logs into a Neo4j graph database using the STIX data model, we developed a Python script to generate synthetic honeypot logs. This approach allowed us to create controlled datasets that mimic real-world cyber-attack patterns while avoiding the ethical and legal implications of using real attack data~\cite{provos2007virtual}.
+
+\subsubsection{Methodology}
+
+We designed a Python script that generates synthetic honeypot logs with the following key features:
+
+\begin{enumerate}
+    \item \textbf{Attack Simulation with Logical Dependencies}: The script simulates common cyber attacks by randomly selecting attack types such as SSH brute-force, SQL injection, and DDoS attacks. Each attack type is logically linked to appropriate target services:
+    \begin{itemize}
+        \item \textbf{SSH brute-force} targets services like SSH.
+        \item \textbf{SQL injection} attacks target database services such as MySQL or PostgreSQL.
+        \item \textbf{DDoS} attacks target services like HTTP or DNS.
+    \end{itemize}
+    
+    \item \textbf{Consistent Payload Format}: All payloads are structured in a consistent data format (JSON-like structures) to ensure uniformity. Each payload includes:
+    \begin{itemize}
+        \item A \texttt{type} field indicating the nature of the payload (e.g., \texttt{credentials}, \texttt{query}, \texttt{request}).
+        \item A \texttt{content} field containing the actual data or commands used in the attack.
+    \end{itemize}
+    
+    \item \textbf{Realistic Sample Payloads}: The script incorporates realistic payloads for each attack type:
+    \begin{itemize}
+        \item \textbf{SSH brute-force}: Simulated username and password combinations commonly used in brute-force attempts.
+        \item \textbf{SQL injection}: Malicious SQL queries designed to exploit database vulnerabilities.
+        \item \textbf{DDoS}: Simulated high-traffic requests or packets aimed at overwhelming target services.
+    \end{itemize}
+    
+    \item \textbf{Random Data Generation}: Each log entry includes randomized details to mimic diverse attack scenarios:
+    \begin{itemize}
+        \item \textbf{Source IP Addresses}: Randomly generated to represent different attack origins.
+        \item \textbf{Timestamps}: Randomized within a recent time frame to reflect realistic attack timings.
+        \item \textbf{Target Services}: Selected based on logical dependencies with the attack type.
+    \end{itemize}
+    
+    \item \textbf{Data Storage}: The generated logs are saved in a JSON file format.
+\end{enumerate}
+
+\subsubsection{Tools and Technologies}
+
+\begin{itemize}
+    \item \textbf{Python}: Used for scripting the data generation process.
+    \item \textbf{JSON}: Utilized for storing the synthetic logs in a structured format.
+\end{itemize}
+
+\subsubsection{Ethical Considerations}
+
+By using synthetic data, we avoided issues related to privacy, data sensitivity, and legal restrictions~\cite{acm2018ethics}. This approach ensured compliance with ethical standards in cybersecurity research and eliminated risks associated with handling real attack data.
+
+
+
 
 \subsection{Transforming Logs into STIX Format}
 Logs are converted into STIX objects (e.g., attack patterns, indicators) and relationships to represent attack scenarios.
