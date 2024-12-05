@@ -13,12 +13,6 @@
 \textit{Obuda University}\\
 Budapest, Hungary \\
 sandor.r.bakos@stud.uni-obuda.hu}
-\and
-\IEEEauthorblockN{2\textsuperscript{nd} Anna Bánáti}
-\IEEEauthorblockA{\textit{John von Neumann Faculty of Informatics} \\
-\textit{Obuda University}\\
-Budapest, Hungary \\
-banati.anna@nik.uni-obuda.hu}
 }
 
 \maketitle
@@ -43,7 +37,7 @@ This paper aims to demonstrate the integration of honeypot logs into a Neo4j gra
 
 The novelty of this research lies in its focus on applying a graph-based approach to honeypot log analysis within the STIX framework. While previous studies have explored honeypot data analysis and the use of graph databases separately, the combined application in this context is less explored~\cite{sharma2018utilizing}. This approach not only enhances the visualization of attack patterns but also facilitates better decision-making in Security Operations Centers (SOCs) by providing a comprehensive view of threats~\cite{ring2019survey}. Additionally, it offers a scalable and standardized method for transforming and integrating threat intelligence data, promoting collaboration across organizations~\cite{barnum2012standardizing}.
 
-The remainder of this paper is structured as follows: \textbf{Section 2} provides background on honeypots, the STIX data model, and Neo4j. \textbf{Section 3} describes the methodology for integrating honeypot logs into a graph database. \textbf{Section 4} presents a case study to demonstrate the application of the proposed approach. \textbf{Section 5} discusses the results and implications of the study, while \textbf{Section 6} concludes with key findings and directions for future work.
+The remainder of this paper is structured as follows: \textbf{Section 2} provides background on honeypots, the STIX data model, and Neo4j. \textbf{Section 3} describes the methodology for integrating honeypot logs into a graph database. \textbf{Section 4} presents the key findings and directions for future work.
 
 
 
@@ -190,32 +184,150 @@ During the transformation process, we encountered several challenges that requir
 Transforming the logs into STIX format required careful attention to detail to ensure that all objects were compliant with the STIX 2.0 specification. The modifications made to the script addressed validation errors and enhanced the robustness of the transformation process. This meticulous approach ensured that the data could be effectively integrated into the Neo4j graph database for further analysis.
 
 
-
 \subsection{Loading Data into Neo4j}
-The STIX data is imported into Neo4j, creating a graph representation of the attack scenarios.
 
-\subsection{Graph Visualization and Analysis}
-Attack graphs are visualized using Neo4j's query and visualization tools, enabling insights into attack paths and vulnerabilities.
+To facilitate advanced graph analytics and visualization, we imported the STIX-formatted synthetic honeypot logs into a Neo4j graph database. Neo4j is a high-performance, NoSQL graph database that efficiently stores and traverses connected data~\cite{webber2012graph}. This subsection outlines the methodology used for loading the data, addressing challenges encountered during the process.
 
-\section{Case Study}
-A honeypot log dataset is used to demonstrate the process. The resulting attack graph highlights critical vulnerabilities and paths, as illustrated in related works \cite{banati2022attackgraphs}.
+\subsubsection{Methodology}
 
-\section{Results and Discussion}
-\subsection{Advantages of Graph-Based Analysis}
-Graph-based methods enable efficient visualization and prioritization of security risks, aligning with studies like \cite{banati2022attackgraphs}.
+The data import process involved the following key steps:
 
-\subsection{Challenges}
-Scalability and dynamic updates of attack graphs remain significant challenges, as noted in \cite{simonnagy2022attackgraphs}. Addressing these issues requires optimized graph traversal algorithms and real-time data integration.
+\begin{enumerate}
+    \item \textbf{Setting Up the Neo4j Environment}:
+    \begin{itemize}
+        \item Installed Neo4j Desktop and ensured the database server was running locally.
+        \item Installed the Neo4j Python driver (\texttt{neo4j} library) to enable interaction between Python scripts and the Neo4j database~\cite{neo4jpython}.
+    \end{itemize}
+    
+    \item \textbf{Parsing the STIX Bundle}:
+    \begin{itemize}
+        \item Loaded the \texttt{honeypot\_logs\_stix.json} file using the \texttt{stix2} library~\cite{stix2python}.
+        \item Parsed the STIX bundle to access individual STIX Domain Objects (SDOs) and STIX Cyber-observable Objects (SCOs).
+    \end{itemize}
+    
+    \item \textbf{Mapping STIX Objects to Neo4j Nodes and Relationships}:
+    \begin{itemize}
+        \item Defined mappings where each STIX object type corresponds to a node label in Neo4j (e.g., \texttt{Identity}, \texttt{AttackPattern}, \texttt{ObservedData}).
+        \item Mapped STIX relationships to Neo4j relationships, preserving the semantic meaning (e.g., \texttt{uses}, \texttt{related-to}).
+    \end{itemize}
+    
+    \item \textbf{Creating the Data Import Script}:
+    \begin{itemize}
+        \item Developed a Python script utilizing the Neo4j Python driver to create nodes and relationships in the database.
+        \item Implemented functions to handle each STIX object type, converting STIX objects into Neo4j-compatible formats.
+    \end{itemize}
+    
+    \item \textbf{Handling Data Conversion and Compatibility Issues}:
+    \begin{itemize}
+        \item Addressed challenges related to data type compatibility between STIX objects and Neo4j properties.
+        \item Implemented a \texttt{flatten\_dict} function to flatten nested dictionaries and exclude unsupported data types.
+    \end{itemize}
+    
+    \item \textbf{Executing the Script and Verifying Data Import}:
+    \begin{itemize}
+        \item Ran the script to import the data into Neo4j.
+        \item Verified the successful import by querying the database using Cypher queries and visualizing the graph structure.
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{Challenges and Solutions}
+
+During the data import process, several challenges were encountered:
+
+\begin{itemize}
+    \item \textbf{Unsupported Data Types}:
+    \begin{itemize}
+        \item \textit{Issue}: The Neo4j driver does not support custom objects or certain complex data types (e.g., nested dictionaries, lists of dictionaries).
+        \item \textit{Solution}: Converted STIX objects to dictionaries using \texttt{json.loads(obj.serialize())}. Flattened nested dictionaries to ensure all properties were of supported data types (strings, numbers, booleans, lists).
+    \end{itemize}
+    
+    \item \textbf{Missing Methods in STIX2 Library}:
+    \begin{itemize}
+        \item \textit{Issue}: Methods like \texttt{to\_dict()} and \texttt{as\_dict()} were not available in the version of the \texttt{stix2} library used.
+        \item \textit{Solution}: Utilized \texttt{json.loads(obj.serialize())} to obtain a dictionary representation of STIX objects, ensuring compatibility across different library versions~\cite{stix2python}.
+    \end{itemize}
+    
+    \item \textbf{Attribute Errors}:
+    \begin{itemize}
+        \item \textit{Issue}: Encountered \texttt{AttributeError} exceptions when accessing certain attributes or methods of STIX objects.
+        \item \textit{Solution}: Adjusted the code to use methods and attributes consistent with the library version. Added checks and exception handling to manage potential discrepancies.
+    \end{itemize}
+    
+    \item \textbf{Flattening Nested Structures}:
+    \begin{itemize}
+        \item \textit{Issue}: Nested dictionaries within STIX objects led to properties that Neo4j could not store directly.
+        \item \textit{Solution}: Implemented a recursive \texttt{flatten\_dict} function to flatten nested structures. Excluded keys that were not essential or could cause issues (e.g., \texttt{extensions}, \texttt{objects}).
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Tools and Technologies}
+
+\begin{itemize}
+    \item \textbf{Neo4j Graph Database}: Used for storing and querying graph data~\cite{neo4j}.
+    \item \textbf{Neo4j Python Driver}: Facilitated interaction with the Neo4j database from Python scripts~\cite{neo4jpython}.
+    \item \textbf{Python}: Used for scripting the data import process.
+    \item \textbf{\texttt{stix2} Library}: Utilized for parsing and handling STIX 2.0 objects~\cite{stix2python}.
+    \item \textbf{Cypher Query Language}: Employed for querying the Neo4j database~\cite{francis2018cypher}.
+\end{itemize}
+
+\subsubsection{Considerations}
+
+The process of importing STIX-formatted data into Neo4j required careful handling of data types and structures to ensure compatibility. By systematically addressing the challenges and adapting the code accordingly, we successfully loaded the data into the graph database. This setup enables sophisticated graph analytics and visualization of cyber threat intelligence data, enhancing our ability to detect and analyze attack patterns.
 
 
-\subsection{Opportunities}
-Future work could focus on real-time graph updates and dynamic risk assessment methods, as proposed by \cite{neo4jguide}.
+
 
 \section{Conclusion and Future Work}
-This study demonstrates the integration of honeypot logs into Neo4j using the STIX data model, emphasizing its utility for SOC optimization. Future work will focus on real-time graph models and scalability improvements.
 
-\section*{Acknowledgment}
-The authors thank [Name/Institution] for supporting this research.
+In this study, we successfully transformed synthetic honeypot logs into the Structured Threat Information Expression (STIX) 2.0 format and imported them into a Neo4j graph database. This process involved generating synthetic logs, transforming them into STIX objects, and addressing various challenges during data import.
+
+\subsection{Summary of Contributions}
+
+\begin{itemize}
+    \item \textbf{Synthetic Log Generation}: Developed a Python script to generate synthetic honeypot logs simulating different attack types, including DDoS attacks, SQL injection, and SSH brute-force attempts.
+    \item \textbf{Transformation to STIX Format}: Created a script to convert the synthetic logs into STIX 2.0 objects, ensuring compliance with the STIX specification~\cite{stix2017core}.
+    \item \textbf{Data Import into Neo4j}: Imported the STIX-formatted data into Neo4j, mapping STIX objects to nodes and relationships in the graph database~\cite{webber2012graph}.
+    \item \textbf{Handling Data Compatibility Issues}: Addressed challenges related to data type compatibility and property constraints in Neo4j by flattening nested structures.
+\end{itemize}
+
+\subsection{Simplifying Nested Structures}
+
+One of the significant challenges encountered was handling the nested structures inherent in STIX objects. Neo4j properties are limited to simple data types (strings, numbers, booleans, and lists of these types) and do not support nested dictionaries or complex data structures~\cite{neo4j}. To overcome this limitation, we implemented a \textit{flattening} process:
+
+\begin{itemize}
+    \item \textbf{Flattening Nested Dictionaries}: Transformed nested dictionaries into a single-level dictionary by concatenating keys with an underscore separator. For example, a nested property like \texttt{address\{city\}} becomes \texttt{address\_city}.
+    \item \textbf{Excluding Unsupported Fields}: Identified and excluded fields that could not be flattened effectively or were not essential for analysis, such as large binary data or deeply nested extensions.
+    \item \textbf{Including Payload Data}: Adjusted the flattening function to include critical fields like \texttt{extensions} when necessary, ensuring that important data like attack payloads were not omitted from the graph database.
+\end{itemize}
+
+This approach allowed us to maintain data integrity and include essential information in Neo4j while adhering to its property constraints.
+
+\subsection{Limitations}
+
+Despite the successful import of data, certain limitations were identified:
+
+\begin{itemize}
+    \item \textbf{Data Loss During Flattening}: The flattening process may lead to data loss or oversimplification of complex structures, potentially impacting the depth of analysis.
+    \item \textbf{Property Size Constraints}: Neo4j imposes size limits on property values, which may restrict the storage of large payloads or detailed metadata.
+    \item \textbf{Security Considerations}: Storing sensitive payload data within the graph database raises concerns about data privacy and security, necessitating careful handling and access control.
+\end{itemize}
+
+\subsection{Future Work}
+
+Building upon the foundation established in this study, future work can explore the following areas:
+
+\begin{itemize}
+    \item \textbf{Enhanced Data Modeling}: Develop a more sophisticated data model that better represents the relationships and hierarchies within the STIX data, potentially using advanced features of Neo4j or alternative graph databases.
+    \item \textbf{Integration with Real-world Data}: Apply the transformation and import process to real honeypot logs to validate the approach and uncover practical challenges.
+    \item \textbf{Visualization and Analysis Tools}: Implement visualization tools and analytical queries to leverage the graph structure for threat intelligence insights and anomaly detection~\cite{barnum2014standardizing}.
+    \item \textbf{Security and Access Control}: Incorporate security measures to protect sensitive data within the database, such as role-based access control and data encryption.
+    \item \textbf{Performance Optimization}: Investigate methods to optimize the import process and query performance, especially with larger datasets.
+\end{itemize}
+
+\subsection{Conclusion}
+
+This study demonstrated a practical approach to transforming synthetic honeypot logs into the STIX format and importing them into a graph database for advanced analysis. By addressing challenges related to data compatibility and structure, we enabled the integration of cyber threat intelligence data into a format suitable for graph-based exploration. The methodologies and solutions presented provide a foundation for further research and development in the field of cybersecurity analytics.
+
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
