@@ -1,4 +1,5 @@
 # loading-into-neo4j.py
+# Script to load STIX data into Neo4j for visualization and analysis
 
 from neo4j import GraphDatabase
 from stix2 import parse
