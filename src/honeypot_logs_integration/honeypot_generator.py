@@ -1,6 +1,7 @@
 # honeypot_generator.py
 # Script to generate synthetic honeypot logs for testing purposes
 
+import os
 import random
 import json
 from datetime import datetime, timedelta
@@ -75,8 +76,13 @@ if __name__ == "__main__":
     # Generate synthetic honeypot logs
     logs = generate_logs(num_logs)
 
+    # Ensure the .tmp directory exists
+    output_dir = ".tmp"
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
     # Save logs to a JSON file
-    output_file = "synthetic_honeypot_logs.json"
+    output_file = os.path.join(output_dir, "synthetic_honeypot_logs.json")
     with open(output_file, "w") as f:
         json.dump(logs, f, indent=4)
 
