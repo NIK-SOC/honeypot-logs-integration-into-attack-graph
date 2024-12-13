@@ -1,3 +1,6 @@
+# honeypot_generator.py
+# Script to generate synthetic honeypot logs for testing purposes
+
 import random
 import json
 from datetime import datetime, timedelta
