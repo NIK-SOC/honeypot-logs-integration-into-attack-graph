@@ -1,3 +1,6 @@
+# neo4j-test-connection.py
+# Script to test the connection to a Neo4j database
+
 from dotenv import load_dotenv
 import os
 from neo4j import GraphDatabase
