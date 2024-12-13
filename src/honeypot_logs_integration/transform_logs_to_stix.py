@@ -1,4 +1,5 @@
 # transform_logs_to_stix.py
+# Script to transform synthetic honeypot logs into STIX format
 
 import json
 from datetime import datetime
